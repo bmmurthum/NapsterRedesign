@@ -44,71 +44,7 @@ It also provides simple keyword search and returns the description of the remote
 keyword search, the server performs the search in the “files” table and returns the resource location of the
 remote files. The resource location includes the remote hostname, port number, remote file name, and the
 connection speed (the host name and connection speed is retrieved from the corresponding entry in the
-“users” table). The server allows multiple clients to register and upload their descriptions at the same time. It also allows multiple hosts to query for files at the same time. It tracks the availability of the remote resources too. If a host “unregistered” from the system, the associated file descriptions and user information are deleted from the system. A screen capture of the required server side of the application is given in Figure 2.
-
-## Notes for Developers
-
-### Work-Flow of Server-Host Connection
-
-1. Host-A connects to "Centralized Server" (CS) and simultaneously uploads files to share and their associated descriptions.
-2. CS sends ack-message to Host-A.
-3. Host-A sends a keyword to search CS's available files.
-4. CS replies to Host-A with a list of the files that match the keyword search and who (which host) has them.
-5. After deciding what file it wants, the *client* in Host-A requests the file to the *server* in Host-B.
-6. Host-B sends the file to the *client* in Host-A.
-
-### Centralized-Server
-
-__Requirements:__
-
-- Multithread, to allow clients to register and upload their description at the same time.
-- Keeps track of all the available files and who has them in real-time. If a host disconnects, then it doesn't show its files.
-- Provides simple keywords search, returning a list of files and their information.
-
-#### Structure and Methods
-
-`Main()`
-- This listens for new connections from hosts on a ServerSocket, then sends the new hosts to clientHandler(), creating a new thread.
-
-`clientHandler() class` 
-- Creates a new thread for the new client (host).
-- It receives the file descriptions from the host and stores them in a two-dimensional array, stored in the Centralized-Server class. We can use a function storeInfo() to do this.
-- It will listen for a keyword search request from the host.
-- When it receives it, it will scan the two-dimensional array and will return a list of the matching files to the host.
-
-### Host
-
-__Client Requirements:__
-
-- Initially connects to Centralized-Server and sends file descriptions.
-- Can request keyword searches to the CS
-- Once it obtains the results from the search it can *retreive* a file from another host.
-
-__Server Requirements:__
-
-- Listens for file requests.
-- When a file is requested, it sends the file over a TCP connection.
-
-#### Strucure and Methods
-
-`GUI class`
-- picture in assignment PDF
-
-`onConnect()` 
-- Activated from the GUI.
-- Connects to the Centralized Server using the info provided by the user on the GUI.
-- Sends file descriptions to the Centralized Server.
-
-`keywordSearch()`
-- Activated from the GUI.
-- Sends a ketword search request along with the keyword(s).
-- Once it receives an answer, it displays the different files.
-
-`requestFile()`
-- Once the user decides what files he/she wants, this method will send a transfer request to the *server of the host* that has such file and it will download it.
-
-`quit()`
-- This stops the connection and shuts the whole host
+“users” table). The server allows multiple clients to register and upload their descriptions at the same time. It also allows multiple hosts to query for files at the same time. It tracks the availability of the remote resources too. If a host “unregistered” from the system, the associated file descriptions and user information are deleted from the system.
 
 ## Development Updates
 
@@ -117,7 +53,7 @@ __Server Requirements:__
 **Brendon**
 - Setting up the initial structure from the team project for further development.
 
-**Extra-TO-DO** - In future updates.
+**Future Updates**
 1. Validate the files from the XML document to actually exist (we had code for this from the last one).
 2. Add more interesting sample-cases-- do this by downloading more images from sites described in "SampleUsers" folder, and then creating appropriate XML files. 
 3. Have the GUI understand the "ENTER" key to search and to connect.
